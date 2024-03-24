@@ -22,6 +22,13 @@ Welcome to JustDataML, a user-friendly tool designed to make machine learning ac
 
 To run this tool, you will require the following:
 
+Download all the required packages
+
+```bash
+pip install -r requirements.txt
+
+```
+
 ## Installation
 
 Suggestion: Please Use a Virtual env for this to successfully run it 
@@ -180,7 +187,7 @@ If you have any feedback or suggestions, please reach out to us at jaideep.dabhi
 🚀 Data Scientist | Analytics Enthusiast | Python Aficionado 🐍 \
 I'm a Data Scientist working in the BioTech Industry.\
 I am based out of India 🇮🇳 \
-I love to code in Python,Bash and R \
+I love to code in Python, Bash and R \
 I have a strong base in statistics and Machine learning \
 I am passionate about networking and fostering meaningful connections within the tech community. Feel free to reach out if you'd like to discuss Data Science 👨🏻‍💻, Machine Learning 🦾, Chess ♞ or Pens 🖋️
 
