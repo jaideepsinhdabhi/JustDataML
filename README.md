@@ -1,5 +1,6 @@
 
-![Logo](logo.png)
+<img src="logo.png" width="200" height="150">
+
 
 
 # JustDataML :Simplified Machine Learning for Everyone
