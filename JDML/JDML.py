@@ -76,7 +76,7 @@ class Just_Data_ML:
 
 
 
-def main():
+def MLtool():
     parser = argparse.ArgumentParser(
         prog="JDML",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -134,5 +134,7 @@ def main():
         else:
             print("Some Problem with Arguments")
             parser.print_help()
+
+            
 if __name__ == "__main__":
-    main()
+    MLtool()

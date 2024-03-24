@@ -326,6 +326,9 @@ def load_object(file_path):
 
 def ReadConfig(file_path):
     try:
+        if not os.path.exists(file_path):
+            os.makedirs("Data",exist_ok=True)
+            raise FileNotFoundError("Data_Config.csv file not found. Please make sure it exists in the 'Data' folder.")
         output_json = "".join([file_path.split(".")[0],".json"])
         Config_Dict = {}
         with open(file_path, 'r') as file:

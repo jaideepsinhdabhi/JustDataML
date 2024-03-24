@@ -1,2 +1,2 @@
 [console_scripts]
-JDML = JDML:main
+JDML = JDML:MLtool

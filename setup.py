@@ -42,7 +42,7 @@ setup(
     install_requires=get_requirements('requirements.txt'),
     entry_points={
         'console_scripts': [
-            'JDML=JDML:main'
+            'JDML=JDML:MLtool'
         ]
     }
 )
