@@ -23,13 +23,13 @@ Welcome to JustDataML, a user-friendly tool designed to make machine learning ac
 
 ## Requirements
 
-to Run this Tool you will Require
-Below this thing to do
+To run this Tool you will Require
+Below these things to do
 
 
 ## Installation
 
-Suggestion: Please Use a Virtual env for this to succesfully run it 
+Suggestion: Please Use a Virtual env for this to successfully run it 
 
 1. Install my Application with pip install
 
@@ -49,7 +49,7 @@ Go into the Repo Folder
 ```
 we need to download all the required packages
 ```bash
-  pip install requirements.txt
+  pip install -r requirements.txt
 ```
 ## Usage/Examples
 
@@ -61,12 +61,12 @@ python JDML.py --Train --Predict <test.csv> --Output <Output Name>
 
 - `-T, --Train`: [Optional] If provided, it initiates model training based on the specified data_config file. 
 
-    Note : Ensure that the Data_Config.csv file and Datafile is available in the "Data" folder.
+    Note: Ensure that the Data_Config.csv file and Datafile are available in the "Data" folder.
 
 - `-P, --Predict`: [Optional] If provided, performs prediction using the trained model. Make sure not to delete or modify the artifact folder to get the results.
 
-- `-O, --Output`: [Required with -P (--Predict)] Specifies the output name for the predicted dataframe generated from the test data.
-    Note: it will also generate Model_summary file and if Hyperparameter is given Yes in Config file then it will generate stats file for that too
+- `-O, --Output`: [Required with -P (--Predict)] Specifies the output name for the predicted data frame generated from the test data.
+    Note: it will also generate a Model_summary file and if Hyperparameter is given Yes in the Config file then it will generate a stats file for that too
 
 
 
@@ -80,7 +80,7 @@ This is an example of a data configuration file (`Data_Config.csv`) used with th
 
 The CSV file contains the following fields:
 
-- **Data_Name:** Name of the dataset file with extension and it should be present in Data Folder (`bezdekIris.data` in this example).
+- **Data_Name:** Name of the dataset file with extension and it should be present in the Data Folder (`bezdekIris.data` in this example).
 - **Features_Cols:** Comma-separated list of feature columns in the dataset (`sepal length, sepal width, petal length, petal width` in this example).
 - **Target_Col:** Name of the target column in the dataset (`class` in this example).
 - **Problem_Objective:** Objective of the machine learning task (`Classification` or `Regression`).
@@ -91,7 +91,7 @@ The CSV file contains the following fields:
 
     #####   A sample csv file and some Data are there in Data Folder for a demo Run
 
-    #### Note : It will also generate logs into a logs folder for every run please check for every Run to get more idea on that.
+    #### Note: It will also generate logs into a logs folder for every run please check for every Run to get more idea on that.
 
 ## Available Models for Regression and Classification
 
@@ -107,7 +107,7 @@ The CSV file contains the following fields:
    - Description: Gradient Boosting is a machine learning technique for regression and classification problems that builds models in a stage-wise manner and tries to fit new models to the residuals of the previous models.
 
 4. **Linear Regression**
-   - Description: Linear Regression is a linear approach to modeling the relationship between a dependent variable and one or more independent variables.
+   - Description: Linear Regression is a linear approach to modelling the relationship between a dependent variable and one or more independent variables.
 
 5. **XGBRegressor**
    - Description: XGBoost is an optimized distributed gradient boosting library designed to be highly efficient, flexible, and portable.
@@ -128,7 +128,7 @@ The CSV file contains the following fields:
     - Description: AdaBoost (Adaptive Boosting) is an ensemble learning method that combines multiple weak learners to create a strong learner.
 
 11. **KNeighborsRegressor**
-    - Description: KNeighborsRegressor is a simple, non-parametric method used for regression tasks based on the k-nearest neighbors algorithm.
+    - Description: KNeighborsRegressor is a simple, non-parametric method used for regression tasks based on the k-nearest neighbours algorithm.
 
 ### Classification Models:
 
@@ -142,7 +142,7 @@ The CSV file contains the following fields:
    - Description: Gaussian Naive Bayes is a simple probabilistic classifier based on applying Bayes' theorem with strong independence assumptions between the features.
 
 4. **KNeighborsClassifier**
-   - Description: KNeighborsClassifier is a simple, instance-based learning algorithm used for classification tasks based on the k-nearest neighbors algorithm.
+   - Description: KNeighborsClassifier is a simple, instance-based learning algorithm used for classification tasks based on the k-nearest neighbours algorithm.
 
 5. **Decision Tree Classifier**
    - Description: Decision Tree Classifier is a non-parametric supervised learning method used for classification.
@@ -162,11 +162,11 @@ The CSV file contains the following fields:
 10. **XGBClassifier**
     - Description: XGBoost Classifier is an optimized distributed gradient boosting library designed for classification problems.
 
-These are the available regression and classification models supported by the JDML tool. You can use them for training and prediction based on your specific machine learning tasks.
+These are the available regression and classification models supported by the JDML tool. You can use them for training and prediction based on your specific machine-learning tasks.
 
 ## Feedback
 
-If you have any feedback or suggestions , please reach out to us at jaideep.dabhi7603@gmail.com
+If you have any feedback or suggestions, please reach out to us at jaideep.dabhi7603@gmail.com
 
 
 ## Acknowledgements
@@ -175,7 +175,7 @@ If you have any feedback or suggestions , please reach out to us at jaideep.dabh
 
 
  - [Krish Naik Github Repo for Above Project ](https://github.com/krishnaik06/mlproject) Github Repo from the playlist for reference. 
- - [How to Build a Complete Python Package Step-by-Step by ArjanCodes](https://youtu.be/5KEObONUkik?si=QYVU4lu8tpfmyTXV). This video really helped me to write a python Package and published it to the [PyPi](pypi.org)
+ - [How to Build a Complete Python Package Step-by-Step by ArjanCodes](https://youtu.be/5KEObONUkik?si=QYVU4lu8tpfmyTXV). This video really helped me to write a Python package and published it to the [PyPi](pypi.org)
  
 # Hi, I'm Jaideepsinh Dabhi (jD)! 👋
 
@@ -183,9 +183,9 @@ If you have any feedback or suggestions , please reach out to us at jaideep.dabh
 ## 🚀 About Me
 
 🚀 Data Scientist | Analytics Enthusiast | Python Aficionado 🐍 \
-I'm a Data Scientist working in a BioTech Industry.\
+I'm a Data Scientist working in the BioTech Industry.\
 I am based out of India 🇮🇳 \
-I love to code in python ,Bash and R \
+I love to code in Python,Bash and R \
 I have a strong base in statistics and Machine learning \
 I am passionate about networking and fostering meaningful connections within the tech community. Feel free to reach out if you'd like to discuss Data Science 👨🏻‍💻, Machine Learning 🦾, Chess ♞ or Pens 🖋️
 
@@ -197,7 +197,7 @@ I am passionate about networking and fostering meaningful connections within the
 
 
 ## My Updates
-👩‍💻 I'm currently working on Enhancing and trying to get more Features into this Tool
+👩‍💻 I'm currently working on Enhancing and trying to get more features into this Tool
 
 🧠 I'm currently learning Gen AI and Computer Vision
 
