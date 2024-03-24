@@ -1,9 +1,9 @@
 
-<img src="logo.png" width="150" height="250">
+<img src="logo.png" width="250" height="200">
 
 
 
-# JustDataML :Simplified Machine Learning for Everyone
+# JustDataML : Simplified Machine Learning for Everyone
 
 Welcome to JustDataML, a user-friendly tool designed to make machine learning accessible to all, regardless of technical background. JustDataML automates the process of model selection, data preprocessing, and prediction, allowing you to focus on insights rather than coding complexities.
 
