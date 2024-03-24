@@ -1,0 +1,7 @@
+Data_Name,Reaction Network (Undirected).csv,,,,,,,,,,,,,,,,,,,,,,,,,,
+Features_Cols,Connected Components,Diameter,Radius,Centralization,Shortest Path,Characteristic Path,Avg.num.Neighbours,Density,Heterogeneity,Isolated Nodes,Number of Self Loops,Multi-edge Node Pair,NeighborhoodConnectivity,NumberOfDirectedEdges,Stress,SelfLoops,Partner Of MultiEdged NodePairs,Degree,TopologicalCoefficient,BetweennessCentrality,Radiality,Eccentricity,NumberOfUndirectedEdges,ClosenessCentrality,AverageShortestPathLength,ClusteringCoefficient,nodeCount
+Target_Col,edgeCount,,,,,,,,,,,,,,,,,,,,,,,,,,
+Problem_Objective,Regression,,,,,,,,,,,,,,,,,,,,,,,,,,
+Normalization_tech,StandardScaler,,,,,,,,,,,,,,,,,,,,,,,,,,
+Model_to_include,ALL,,,,,,,,,,,,,,,,,,,,,,,,,,
+HyperParamter_Yes_or_No,No,,,,,,,,,,,,,,,,,,,,,,,,,,

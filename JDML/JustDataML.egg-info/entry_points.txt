@@ -1,0 +1,2 @@
+[console_scripts]
+JDML = JDML:main
