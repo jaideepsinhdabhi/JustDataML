@@ -1,5 +1,5 @@
 
-![Logo](https://github.com/jaideepsinhdabhi/JustDataML/logo.png)
+![Logo](logo.png)
 
 
 # JustDataML :Simplified Machine Learning for Everyone
