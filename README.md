@@ -5,11 +5,9 @@
 
 Welcome to JustDataML, a user-friendly tool designed to make machine learning accessible to all, regardless of technical background. JustDataML automates the process of model selection, data preprocessing, and prediction, allowing you to focus on insights rather than coding complexities.
 
-
 ## Authors
 
 - [@jaideepsinhdabhi](https://www.github.com/jaideepsinhdabhi)
-
 
 ## Features
 
@@ -18,19 +16,17 @@ Welcome to JustDataML, a user-friendly tool designed to make machine learning ac
 - Quick Predictions
 - Flexible Configuration
 - Hyperparameter Tuning
-- Prediction accurately
+- Accurate Prediction
 
 ## Requirements
 
-To run this Tool you will Require
-Below are these things to do
-
+To run this tool, you will require the following:
 
 ## Installation
 
 Suggestion: Please Use a Virtual env for this to successfully run it 
 
-1. Install my Application with pip install
+1. Install This Application with pip install
 
 ```bash
   pip install JustDataML
