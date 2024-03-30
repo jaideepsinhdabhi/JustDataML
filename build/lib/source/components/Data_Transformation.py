@@ -2,15 +2,20 @@ from dataclasses import dataclass
 import sys
 import os
 import numpy as np 
-import pandas as pd 
+import pandas as pd
+import warnings
+warnings.filterwarnings("ignore") 
+
+
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder , StandardScaler, LabelEncoder
+
 from source.Exception import CustomException
 from source.Logger import logging
 from source.Utils import save_object
-from source.Configuration import Features_Cols, Data_df, Target_Col,Problem_Objective
+#from source.Configuration import Features_Cols, Data_df, Target_Col,Problem_Objective
 
 @dataclass
 class Data_transformationConfig:
@@ -28,8 +33,18 @@ class Data_Transformation:
     This is a very Import Step in our Program to do Data Tranformation 
     """
 
-    def __init__(self):
+#    def __init__(self):
+#        self.Data_transformationConfig=Data_transformationConfig()
+
+    def __init__(self, features_cols, data_df, target_col, problem_objective,normalization_tech):
+        self.Features_Cols = features_cols
+        self.Data_df = data_df
+        self.Target_Col = target_col
+        self.Problem_Objective = problem_objective
         self.Data_transformationConfig=Data_transformationConfig()
+        self.Normalization_tech = normalization_tech
+
+
 
     def get_data_transformer_object(self):
         '''
@@ -43,24 +58,25 @@ class Data_Transformation:
         try:
 
             #All_Features = self.Data_transformationConfig.DataConfig["Features_Cols"]
-            All_Features = Features_Cols
-            numerical_columns = Data_df[All_Features].select_dtypes(exclude="object").columns   #To get Num Features
-            categorical_columns = Data_df[All_Features].select_dtypes(include="object").columns #To get Cat Features
+            All_Features = self.Features_Cols
+            numerical_columns = self.Data_df[All_Features].select_dtypes(exclude="object").columns   #To get Num Features
+            categorical_columns = self.Data_df[All_Features].select_dtypes(include="object").columns #To get Cat Features
             num_pipeline = Pipeline(
                 steps=[
                     ("imputer",SimpleImputer(strategy="median")),
-                    ("scaler",StandardScaler())
+                    ("scaler",self.Normalization_tech)
                 ]
             )
             cat_pipeline = Pipeline(
                 steps=[
                     ('imputer',SimpleImputer(strategy="most_frequent")),
-                    ("one hot encoder",OneHotEncoder()),
-                    ("scaler",StandardScaler(with_mean=False))
+                    ("one hot encoder",OneHotEncoder())
+                    #("scaler",StandardScaler(with_mean=False))
+                    #("scaler",self.Normalization_tech(with_mean=False))
                 ]
             )
             logging.info("Numerical and Categorical Columns Processed (Scaling and OneHotEncoding Done)")
-            
+            logging.info(f"for Numerical Columns we will do scaling with {self.Normalization_tech} )")
             logging.info(f"Categorical columns: {list(categorical_columns)}")
             logging.info(f"Numerical columns: {list(numerical_columns)}")
 
@@ -95,7 +111,7 @@ class Data_Transformation:
             logging.info('Obtaining Preprocessor object')
             preprocessor_obj = self.get_data_transformer_object()
 
-            target_column_name = Target_Col[0]
+            target_column_name = self.Target_Col[0]
             logging.info(f"Target Col is : {target_column_name}")            
             input_feature_train_df=train_df.drop(columns=[target_column_name],axis=1)
             target_feature_train_df=train_df[target_column_name]
@@ -108,7 +124,7 @@ class Data_Transformation:
             input_feature_test_arr=preprocessor_obj.transform(input_feature_test_df)
 
             # Do Label Encoding for Target Variable (for Classification Only)
-            if Problem_Objective=='Classification':
+            if self.Problem_Objective=='Classification':
                 try:
                     logging.info("Here Problem Objective is  Classification so we have done label encoding for target Variable")
                     label_encoder = LabelEncoder()

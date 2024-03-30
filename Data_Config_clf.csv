@@ -1,0 +1,7 @@
+Data_Name,bezdekIris.data,,,
+Features_Cols,sepal length,sepal width,petal length,petal width
+Target_Col,class,,,
+Problem_Objective,Classification,,,
+Normalization_tech,StandardScaler,,,
+Model_to_include,ALL,,,
+HyperParamter_Yes_or_No,Yes,,,

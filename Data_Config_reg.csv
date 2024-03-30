@@ -1,0 +1,7 @@
+Data_Name,stud.csv,,,,,,
+Features_Cols,gender,race_ethnicity,parental_level_of_education,lunch,test_preparation_course,reading_score,writing_score
+Target_Col,math_score,,,,,,
+Problem_Objective,Regression,,,,,,
+Normalization_tech,RobustScaler,,,,,,
+Model_to_include,ALL,,,,,,
+HyperParamter_Yes_or_No,Yes,,,,,,

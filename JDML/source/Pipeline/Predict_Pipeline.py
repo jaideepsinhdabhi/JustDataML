@@ -1,11 +1,14 @@
 import os
 import sys
 import pandas as pd 
+import warnings
+warnings.filterwarnings("ignore") 
+
 
 from source.Logger import logging
 from source.Exception import CustomException
 from source.Utils import load_object
-from source.Configuration import Features_Cols, Problem_Objective
+#from source.Configuration import Features_Cols, Problem_Objective
 
 class PredictPipeline:
 
@@ -15,8 +18,8 @@ class PredictPipeline:
 
     """
 
-    def __init__(self):
-        pass
+    def __init__(self, problem_objective):
+        self.Problem_Objective = problem_objective
 
     def predict(self, features):
 
@@ -30,7 +33,7 @@ class PredictPipeline:
             model_path = os.path.join("artifact", "model.pkl")
             preprocessor_path = os.path.join('artifact', 'prerocessor.pkl')
         
-            if Problem_Objective=="Classification":
+            if self.Problem_Objective=="Classification":
                 label_encoder_path = os.path.join('artifact','Targetlabel.pkl')
                 label_encoder = load_object(file_path=label_encoder_path)
                 logging.info("Here Target_label is also loaded succesfully")
@@ -38,10 +41,10 @@ class PredictPipeline:
             model = load_object(file_path=model_path)
             preprocessor = load_object(file_path=preprocessor_path)
             print("Model Loaded Succesfully")
-            logging.info("Preprocessing and model Loaded is Successful")
+            logging.info("Preprocessing and model Loading is Successful")
             data_scaled = preprocessor.transform(features)
             preds = model.predict(data_scaled)
-            if Problem_Objective=="Classification":
+            if self.Problem_Objective=="Classification":
                 preds = preds.astype(int)
                 preds = label_encoder.inverse_transform(preds)
                 logging.info("Classification Done Succesfully and decoded the prediction to orignal Target Values")
@@ -61,10 +64,10 @@ class CustomData:
     """
 
 
-    def __init__(self, **kwargs):
+    def __init__(self,features_cols, **kwargs):
         try:
-
-            for feature in Features_Cols:
+            self.Features_Cols = features_cols
+            for feature in self.Features_Cols:
                 # print(feature)
                 setattr(self, feature, kwargs.get(feature, None))
 
@@ -77,7 +80,7 @@ class CustomData:
 
         try:
             custom_data_input_dict = {}
-            for feature in Features_Cols:
+            for feature in self.Features_Cols:
                 feature_value = getattr(self,feature)
                 #print("Fearture: ",feature,"Value: ",type(list(feature_value)))
                 custom_data_input_dict[feature] = list(feature_value)

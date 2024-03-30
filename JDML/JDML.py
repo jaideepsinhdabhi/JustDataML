@@ -4,13 +4,18 @@ import os
 import sys
 import pandas as pd
 import argparse
-
+import warnings
+warnings.filterwarnings("ignore") 
 
 
 from source.Exception import CustomException
 from source.Pipeline import Train_Pipeline
 from source.Pipeline.Predict_Pipeline import PredictPipeline,CustomData
 from source.Logger import logging
+
+#from source.Configuration import Features_Cols, Data_df, Target_Col, Models, HyperParamter_Yes_or_No, Problem_Objective
+from source.Configuration import DataProcessor
+
 
 
 
@@ -21,8 +26,18 @@ class Just_Data_ML:
     """
 
     def __init__(self,args):
-        self.args =args
-
+        self.args = args
+        #self.data_processor = DataProcessor(os.path.join("Data", "Data_Config.csv"))
+        self.data_processor = DataProcessor(args.Config)
+        self.data_processor.load_config()
+        self.data_processor.read_data()
+        self.Data_df = self.data_processor.Data_df
+        self.Features_Cols = self.data_processor.Features_Cols
+        self.Target_Col = self.data_processor.Target_Col
+        self.Models = self.data_processor.Models
+        self.HyperParamter_Yes_or_No = self.data_processor.HyperParamter_Yes_or_No
+        self.Problem_Objective = self.data_processor.Problem_Objective
+        self.Normalization_tech = self.data_processor.scaler
         
     def Data_Train(self):
 
@@ -32,7 +47,7 @@ class Just_Data_ML:
 
         try:
             os.makedirs("Output",exist_ok=True)
-            train_ourconfig_model = Train_Pipeline.TrainingPipeline()
+            train_ourconfig_model = Train_Pipeline.TrainingPipeline(self.Features_Cols, self.Data_df, self.Target_Col, self.Models, self.HyperParamter_Yes_or_No, self.Problem_Objective,self.Normalization_tech)
             train_ourconfig_model.Train_Model()    
 
         except Exception as e:
@@ -47,11 +62,11 @@ class Just_Data_ML:
         """
 
         try:
-            predict_val = PredictPipeline()
+            predict_val = PredictPipeline(self.Problem_Objective)
             data = pd.read_csv(self.args.Predict)
             input_features = data.columns
 
-            custom_data = CustomData(**dict.fromkeys(input_features))
+            custom_data = CustomData(self.Features_Cols,**dict.fromkeys(input_features))
             
             for feature in input_features:
                 custom_data.__dict__[feature] = data[feature]
@@ -65,7 +80,7 @@ class Just_Data_ML:
                 print(f"Predicted file is saved in {out_path}")
                 logging.info(f"Predicted file is saved in {out_path}")
             else:
-                out_path = os.path.join('Output',f'Target_outFile.csv')
+                out_path = os.path.join('Output','Target_outFile.csv')
                 print(f"Predicted file is saved in {out_path} : Note --Output was not given")
                 logging.info(f"Predicted file is saved in {out_path} : Note --Output was not given")
             data.to_csv(out_path,index=False)
@@ -84,17 +99,19 @@ def MLtool():
             Tool : JustData_ML (JDML)
             Author: Jaideepsinh Dabhi
             emailID: jaideep.dabhi7603@gmail.com
-            Usage : JDML.py -T -P <test.csv> -O <Output Folder>
+            Usage : JDML.py -C <Data_Config.csv>-T -P <test.csv> -O <Output Folder>
                                          
             * This Tool is Design to Train Machine Learning models and give prediction to help non coder or non tech students to do ML.
             * This Tool will Train models with various paramters and give output.
                         
                 *****************\n
                 ARUGMENTS  
+                -C, --Config    [Compulsory] You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
+                            Make Sure you give Proper Argument mentioned in the Document.
                 -T, --Train     [Optional]  If you give this function it will start training your model based on your data_config file.
-                            Make Sure you have Data_Config_csv file in "Data" Folder.
+                            Make Sure you have Data in "Data" Folder.
                 -P, --Predict   [Optional]  If you give this function it will do prediction based on your trained model.
-                            Make  Sure you don't delete or modify artifact folder to better results.
+                            Make  Sure you don't delete or modify artifact folder to get better results.
                 -O, --Output    [Please give with --Predict ]Name of Output csv file (if not given it will store data in Target_outFile csv file)
                             It will store you input test file to output folder with 'Target_Out' Col containing Predictions based on your model.
                                 
@@ -102,6 +119,7 @@ def MLtool():
         epilog=" Contact jaideep.dabhi7603@gmail.com for any help or suggestion."
     )
 
+    parser.add_argument('-C', '--Config', type = str, help=" Give a Config file to Application to get details about your task ")
     parser.add_argument('-T', '--Train', action="store_true", default=False, help=" Give a Train argument to Train Data and create a Model")
     parser.add_argument('-P', '--Predict', type=str, help=" Give a Test Data to Predict the Values from the Model")
     parser.add_argument('-O', '--Output', type=str, help=" Give a Output name to Predicted Data Frame from Test Data")

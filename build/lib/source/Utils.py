@@ -4,6 +4,9 @@ import csv
 import json
 import pickle
 import pandas as pd
+import warnings
+warnings.filterwarnings("ignore") 
+
 
 from source.Exception import CustomException
 #from source.Configuration import Problem_Objective
@@ -14,6 +17,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 
 from sklearn.model_selection import GridSearchCV
 
+from sklearn.preprocessing import StandardScaler,MinMaxScaler,RobustScaler,MaxAbsScaler 
 
 from sklearn.ensemble import (
     AdaBoostRegressor,AdaBoostClassifier,
@@ -183,6 +187,16 @@ parameters_classifier = {
             }
 
 
+
+
+
+Normalization_method = {
+    "StandardScaler":StandardScaler(),
+    "MinMaxScaler":MinMaxScaler(),
+    "RobustScaler":RobustScaler(),
+    "MaxAbsScaler":MaxAbsScaler()
+
+}
 
 
 

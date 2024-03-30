@@ -1,9 +1,13 @@
 import os
 import sys
+import warnings
+warnings.filterwarnings("ignore") 
+
+
 from source.Exception import CustomException
 from source.Logger import logging
 
-from source.Configuration import Data_df
+#from source.Configuration import Data_df
 
 #import pandas as pd 
 from sklearn.model_selection import train_test_split
@@ -30,7 +34,7 @@ class DataIngestion:
     def __init__(self):
         self.ingestion_config =DataIngestionConfig()
 
-    def initate_data_ingestion(self):
+    def initate_data_ingestion(self,df):
 
         """
         To Initate Data Ingestion use this Function.
@@ -40,12 +44,12 @@ class DataIngestion:
 
         try:
             
-            df = Data_df
+            #df = Data_df
             logging.info("Read the Data Set as Pandas Dataframe")
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)
 
             df.to_csv(self.ingestion_config.raw_data_path,index=False, header=True)
-            logging.info("Train Rest Split will Start, Raw Data Exported")
+            logging.info("Train Test Split will Start, Raw Data Exported")
             train_set, test_set = train_test_split(df,test_size=0.2,random_state=14)
 
             train_set.to_csv(self.ingestion_config.train_data_path,index=False, header=True)

@@ -4,11 +4,13 @@ from dataclasses import dataclass
 
 from sklearn.metrics import r2_score, accuracy_score
 
+import warnings
+warnings.filterwarnings("ignore") 
 
 from source.Logger import logging
 from source.Utils import save_object, evaluate_model
 from source.Exception import CustomException
-from source.Configuration import Models, HyperParamter_Yes_or_No,Problem_Objective
+#from source.Configuration import Models, HyperParamter_Yes_or_No,Problem_Objective
 
 
 @dataclass 
@@ -31,8 +33,11 @@ class ModelTrainer:
     This Function will pick up the best Models and train on that model with best hyper parameter tuning.
     """
 
-    def __init__(self):
-        self.model_trainer_config= ModelTrainerConfig()
+    def __init__(self, models, hyperparameter_yes_or_no, problem_objective):
+        self.Models = models
+        self.HyperParamter_Yes_or_No = hyperparameter_yes_or_no
+        self.Problem_Objective = problem_objective
+        self.model_trainer_config = ModelTrainerConfig()
 
     def initiate_model_trainer(self,train_array,test_array):
         try:
@@ -44,14 +49,14 @@ class ModelTrainer:
                 test_array[:,-1]
             )
 
-            models = Models
-            logging.info(f"It will use {models} Models for Training ")
-            Hyparams= HyperParamter_Yes_or_No
+            models = self.Models
+            logging.info(f"It will use {list(models.keys())} Models for Training ")
+            Hyparams= self.HyperParamter_Yes_or_No
             logging.info(f" Models are Running with HypterParater Configuration of [{Hyparams}]")
 
             model_report:dict = evaluate_model(X_train=X_train,y_train=y_train,
                                                X_test=X_test,y_test=y_test,
-                                               models= models,param = Hyparams,prob = Problem_Objective)
+                                               models= models,param = Hyparams,prob = self.Problem_Objective)
 
             #print(model_report)
             ## to get the best score from the model
@@ -83,9 +88,9 @@ class ModelTrainer:
 
             predicted = best_model.predict(X_test)
 
-            if Problem_Objective == 'Regression':
+            if self.Problem_Objective == 'Regression':
                 matric = r2_score(y_test,predicted)
-            elif Problem_Objective == 'Classification':
+            elif self.Problem_Objective == 'Classification':
                 matric = accuracy_score(y_test,predicted)
             else:
                 print("Correct Problem Objective")

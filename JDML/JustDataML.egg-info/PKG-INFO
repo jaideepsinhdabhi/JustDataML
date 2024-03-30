@@ -73,10 +73,14 @@ we need to download all the required packages
 ## Usage/Examples
 
 ```bash
-python JDML.py --Train --Predict <test.csv> --Output <Output Name>
+python JDML.py --Config <Configfile> --Train --Predict <test.csv> --Output <Output Name>
 
 ```
 ### Arguments
+
+- `-C, --Config`: [Compulsory] You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
+
+    Note: Make sure you give proper argument mentioned in the Document.
 
 - `-T, --Train`: [Optional] If provided, it initiates model training based on the specified data_config file. 
 
@@ -103,7 +107,7 @@ The CSV file contains the following fields:
 - **Features_Cols:** Comma-separated list of feature columns in the dataset (`sepal length, sepal width, petal length, petal width` in this example).
 - **Target_Col:** Name of the target column in the dataset (`class` in this example).
 - **Problem_Objective:** Objective of the machine learning task (`Classification` or `Regression`).
-- **Normalization_tech:** Normalization technique to be applied (`StandardScaler`, `MinMaxScaler`, etc.). (only `StandardScaler` supported )
+- **Normalization_tech:** Normalization technique to be applied (`StandardScaler`, `MinMaxScaler`, etc.).
 - **Model_to_include:** Models to include in the training process (`ALL` or specific models). (below Listed for Models)
 - **HyperParamter_Yes_or_No:** Indicates whether hyperparameter tuning should be performed (`Yes` or `No`).
 
