@@ -26,7 +26,7 @@ setup(
     version="0.0.1",
     author="Jaideepsinh Dabhi",
     author_email="jadieep.dabhi7603@gmail.com",
-    description="This is a Machine Learning Tool Developed to Help Non Tech Students and Non Coders to try ML for there Data",
+    description="JustDataML :Simplified Machine Learning for Everyone",
     package_dir={"":"JDML"},
     packages=find_packages(where="JDML"),
     #packages=find_packages(),
