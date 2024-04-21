@@ -31,7 +31,7 @@ pip install -r requirements.txt
 
 ## Installation
 
-Suggestion: Please Use a Virtual env for this to successfully run it 
+Suggestion: Use a Virtual env for this to successfully run it 
 
 1. Install This Application with pip install
 
@@ -49,7 +49,7 @@ Go into the Repo Folder
 ```bash
   cd JustDataML
 ```
-we need to download all the required packages
+Download all the required packages
 ```bash
   pip install -r requirements.txt
 ```
@@ -61,7 +61,7 @@ python JDML.py --Config <Configfile> --Train --Predict <test.csv> --Output <Outp
 ```
 ### Arguments
 
-- `-C, --Config`: [Compulsory] You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
+- `-C, --Config`: You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
 
     Note: Make sure you give proper argument mentioned in the Document.
 
