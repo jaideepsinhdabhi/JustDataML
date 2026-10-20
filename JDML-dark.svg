@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="240" viewBox="0 0 760 240" role="img" aria-label="JDML">
+  <rect x="24" y="24" width="192" height="192" rx="36" fill="none" stroke="#ffffff" stroke-width="8"/>
+  <line x1="72" y1="168" x2="168" y2="72" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <g fill="#ffffff">
+    <circle cx="72" cy="72" r="6"/><circle cx="120" cy="72" r="6"/>
+    <circle cx="168" cy="120" r="6"/><circle cx="120" cy="168" r="6"/>
+    <circle cx="168" cy="168" r="6"/><circle cx="72" cy="120" r="6"/>
+    <circle cx="72" cy="168" r="14"/><circle cx="120" cy="120" r="14"/><circle cx="168" cy="72" r="14"/>
+  </g>
+  <text x="264" y="150" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="108" font-weight="600" letter-spacing="6" fill="#ffffff">JDML</text>
+  <text x="268" y="196" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="25" font-weight="400" letter-spacing="9" fill="#ffffff">JUSTDATAML</text>
+</svg>

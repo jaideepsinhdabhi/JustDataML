@@ -1,5 +1,8 @@
 
-<img src="https://raw.githubusercontent.com/jaideepsinhdabhi/JustDataML/main/JDML.png" width="260" alt="JDML">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/jaideepsinhdabhi/JustDataML/main/JDML-dark.png">
+  <img src="https://raw.githubusercontent.com/jaideepsinhdabhi/JustDataML/main/JDML.png" width="300" alt="JDML">
+</picture>
 
 # JustDataML: Simplified Machine Learning for Everyone
 
