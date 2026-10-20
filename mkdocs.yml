@@ -1,0 +1,9 @@
+site_name: JustDataML
+site_description: AutoML for tabular data from a config file or one Python call
+repo_url: https://github.com/jaideepsinhdabhi/JustDataML
+nav:
+  - Home: index.md
+  - Configuration: configuration.md
+  - Feature selection: feature-selection.md
+  - Plots and reports: plots.md
+  - Python API: python-api.md

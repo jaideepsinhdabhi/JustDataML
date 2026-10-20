@@ -1,0 +1,10 @@
+{
+  "data": "Reaction Network (Undirected).csv",
+  "target": "edgeCount",
+  "problem": "Regression",
+  "features": "auto",
+  "feature_selection": ["correlation", "importance"],
+  "models": ["Linear Regression", "Random Forest", "HistGradientBoosting Regressor"],
+  "scaler": "MinMaxScaler",
+  "plots": true
+}

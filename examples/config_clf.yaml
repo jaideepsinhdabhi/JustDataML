@@ -1,0 +1,15 @@
+# Iris classification. Run from the examples folder:
+#   JDML train -C config_clf.yaml
+#   JDML predict -C config_clf.yaml Data/bezdekIris.data -O demo
+data: bezdekIris.data
+target: class
+problem: Classification
+features: auto
+feature_selection: importance
+models: ALL
+scaler: StandardScaler
+tuning: false
+metric: accuracy
+cv_folds: 3
+plots: true
+report: true

@@ -1,11 +1,23 @@
+import json
 import os
 import sys
+import numpy as np
 import pandas as pd
 
 
 from ..Logger import logging
 from ..Exception import CustomException
+from ..Options import RunPaths
 from ..Utils import load_object
+
+
+def load_saved_features(paths=None):
+    """The feature columns chosen at training time, or None for a model trained before they were saved."""
+    path = (paths or RunPaths()).artifact("features.json")
+    if not os.path.exists(path):
+        return None
+    with open(path, encoding="utf-8") as handle:
+        return json.load(handle)["selected"]
 
 class PredictPipeline:
 
@@ -13,8 +25,9 @@ class PredictPipeline:
     Predicts the target with the model, preprocessor and label encoder saved by training.
     """
 
-    def __init__(self, problem_objective):
+    def __init__(self, problem_objective, paths=None):
         self.Problem_Objective = problem_objective
+        self.paths = paths or RunPaths()
 
     def predict(self, features):
 
@@ -26,11 +39,11 @@ class PredictPipeline:
         try:
             if self.Problem_Objective not in ("Classification", "Regression"):
                 raise ValueError(f"Problem Objective '{self.Problem_Objective}' is not valid; use 'Regression' or 'Classification'.")
-            model_path = os.path.join("artifact", "model.pkl")
-            preprocessor_path = os.path.join('artifact', 'preprocessor.pkl')
+            model_path = self.paths.artifact("model.pkl")
+            preprocessor_path = self.paths.artifact("preprocessor.pkl")
 
             if self.Problem_Objective=="Classification":
-                label_encoder_path = os.path.join('artifact','Targetlabel.pkl')
+                label_encoder_path = self.paths.artifact("Targetlabel.pkl")
                 label_encoder = load_object(file_path=label_encoder_path)
                 logging.info("Target label encoder loaded successfully")
 
@@ -38,7 +51,7 @@ class PredictPipeline:
             preprocessor = load_object(file_path=preprocessor_path)
             logging.info("Preprocessor and model loaded successfully")
             data_scaled = preprocessor.transform(features)
-            preds = model.predict(data_scaled)
+            preds = np.ravel(model.predict(data_scaled))
             if self.Problem_Objective=="Classification":
                 preds = preds.astype(int)
                 preds = label_encoder.inverse_transform(preds)

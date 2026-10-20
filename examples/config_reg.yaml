@@ -1,0 +1,10 @@
+# Student scores regression.
+data: stud.csv
+target: math_score
+problem: Regression
+features: [gender, race_ethnicity, parental_level_of_education, lunch, test_preparation_course, reading_score, writing_score]
+models: ALL
+scaler: RobustScaler
+tuning: false
+metric: rmse
+plots: true

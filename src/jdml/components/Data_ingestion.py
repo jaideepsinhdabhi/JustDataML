@@ -4,6 +4,7 @@ import sys
 
 from ..Exception import CustomException
 from ..Logger import logging
+from ..Options import RunPaths
 
 
 from sklearn.model_selection import train_test_split
@@ -16,17 +17,27 @@ class DataIngestionConfig:
     Locations in the artifact folder where the raw, train and test data are saved.
     """
 
-    train_data_path: str = os.path.join('artifact','train.csv')
-    test_data_path: str = os.path.join('artifact','test.csv')
-    raw_data_path: str = os.path.join('artifact','data.csv')
+    artifact_dir: str = 'artifact'
+
+    @property
+    def train_data_path(self):
+        return os.path.join(self.artifact_dir,'train.csv')
+
+    @property
+    def test_data_path(self):
+        return os.path.join(self.artifact_dir,'test.csv')
+
+    @property
+    def raw_data_path(self):
+        return os.path.join(self.artifact_dir,'data.csv')
 
 class DataIngestion:
     """
     Saves the data and splits it into train and test sets.
     """
 
-    def __init__(self):
-        self.ingestion_config =DataIngestionConfig()
+    def __init__(self, paths=None):
+        self.ingestion_config = DataIngestionConfig((paths or RunPaths()).artifact_dir)
 
     def initate_data_ingestion(self,df,stratify_col=None,test_size=0.2,random_state=14):
 

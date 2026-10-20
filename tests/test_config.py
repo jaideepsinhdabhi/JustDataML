@@ -49,7 +49,7 @@ def test_legacy_ridge_name_and_all_models(workdir):
     cfg = write_config(workdir / "cfg.csv", Model_to_include="Ridge Classifcaiton")
     assert list(load(cfg).Models) == ["Ridge Classification"]
     cfg = write_config(workdir / "cfg.csv", Model_to_include="ALL")
-    assert len(load(cfg).Models) == 10
+    assert len(load(cfg).Models) == 11  # core models only; LightGBM/CatBoost must be named
 
 
 def test_models_are_clones_of_module_level_ones(workdir):

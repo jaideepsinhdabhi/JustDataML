@@ -22,6 +22,18 @@ def write_config(path, **overrides):
     return str(path)
 
 
+def write_yaml(path, **overrides):
+    import yaml
+
+    cfg = {
+        "data": "clf.csv", "features": ["f1", "f2", "color"], "target": "label",
+        "problem": "Classification", "models": ["Logistic Regression", "Decision Tree Classifier"],
+    }
+    cfg.update(overrides)
+    path.write_text(yaml.safe_dump(cfg))
+    return str(path)
+
+
 @pytest.fixture
 def workdir(tmp_path, monkeypatch):
     """Empty project dir (cwd) with a Data/ folder holding a classification and a regression CSV."""
@@ -40,6 +52,16 @@ def workdir(tmp_path, monkeypatch):
     x = rng.normal(size=n)
     reg = pd.DataFrame({"x": x, "z": rng.normal(size=n), "y": 3 * x + rng.normal(0, 0.1, n)})
     reg.to_csv(tmp_path / "Data" / "reg.csv", index=False)
+    # Extra columns for feature selection tests: an ID, a constant, noise, and a copy of f1.
+    wide = clf.copy()
+    wide.insert(0, "row_id", [f"id{i}" for i in range(n)])
+    wide["const"] = 1
+    wide["noise"] = rng.normal(size=n)
+    wide["f1_copy"] = wide["f1"] * 2 + 1
+    wide["when"] = pd.date_range("2024-01-01", periods=n, freq="D").strftime("%Y-%m-%d")
+    wide["city"] = [f"city{i % 40}" for i in range(n)]
+    wide.to_csv(tmp_path / "Data" / "wide.csv", index=False)
+    wide.drop(columns="label").head(10).to_csv(tmp_path / "test_wide.csv", index=False)
     clf.drop(columns="label").head(10).to_csv(tmp_path / "test_clf.csv", index=False)
     reg.drop(columns="y").head(10).to_csv(tmp_path / "test_reg.csv", index=False)
     return tmp_path
