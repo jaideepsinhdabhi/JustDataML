@@ -1,24 +1,14 @@
-import pandas as pd 
 import sys
+
+import pandas as pd
 from sklearn.base import clone
-from .Utils import ReadConfig, safe_join, LEGACY_MODEL_NAMES, regressor_models, classfication_models, Normalization_method
 from .Exception import CustomException
-
-
+from .Utils import LEGACY_MODEL_NAMES, Normalization_method, ReadConfig, classfication_models, regressor_models, safe_join
 
 
 class DataProcessor:
     def __init__(self, config_file):
         self.config_file = config_file
-        #self.DataConfig = None
-        #self.Data_df = None
-        #self.Features_Cols = None
-        #self.Target_Col = None
-        #self.Normalization_tech = None
-        #self.Model_to_include = None
-        #self.Problem_Objective = None
-        #self.Models = None
-        #self.HyperParamter_Yes_or_No = None
 
     def load_config(self):
         self.DataConfig = ReadConfig(self.config_file)
@@ -76,20 +66,4 @@ class DataProcessor:
 
         except Exception as e:
             raise CustomException(e,sys)
-
-
-
-#Example usage:
-# ConfigFile = os.path.join("Data","Data_Config.csv")
-# data_processor = DataProcessor(ConfigFile)
-# data_processor.load_config()
-# data_processor.read_data()
-# Data_df = data_processor.Data_df
-# Features_Cols = data_processor.Features_Cols
-# Target_Col = data_processor.Target_Col
-# Normalization_tech = data_processor.Normalization_tech
-# Problem_Objective = data_processor.Problem_Objective
-# Models = data_processor.Models
-# HyperParamter_Yes_or_No = data_processor.HyperParamter_Yes_or_No
-
 

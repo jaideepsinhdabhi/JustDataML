@@ -1,38 +1,28 @@
-#python3
-
+import argparse
 import os
 import sys
-import pandas as pd
-import argparse
 import warnings
 
+import pandas as pd
 
-from .Exception import CustomException
-from .Pipeline import Train_Pipeline
-from .Pipeline.Predict_Pipeline import PredictPipeline,CustomData
-from .Logger import logging, setup_logging
-
-#from source.Configuration import Features_Cols, Data_df, Target_Col, Models, HyperParamter_Yes_or_No, Problem_Objective
 from .Configuration import DataProcessor
+from .Exception import CustomException
+from .Logger import logging, setup_logging
+from .Pipeline import Train_Pipeline
+from .Pipeline.Predict_Pipeline import CustomData, PredictPipeline
 from .Utils import safe_join
-
-
 
 
 class Just_Data_ML:
 
     """
-    Just_Data_ML is a class to train and predict our Values 
+    Train models and predict values with them.
     """
-
-    def __init__(self):
-
-        pass
 
     def Data_Train(self, Features_Cols, Data_df, Target_Col, Models, Problem_Objective, HyperParamter_Yes_or_No = 'No'  , Normalization_tech = 'StandardScaler'):
 
         """
-        Here we are calling Train_pipeline and Training our models and saving it to the files we can use for Prediction.
+        Run the training pipeline and save the best model for later predictions.
         """
 
         try:
@@ -48,8 +38,8 @@ class Just_Data_ML:
     def Predict_test(self,Problem_Objective,Features_Cols ,Test_dataDF ):
 
         """
-        Here we are Doing prediction base on our trianed model using in pervious function and importing Predict_pipeline
-        it will take Dataframe and as input (you can use csv file and pass it to the function)
+        Predict with the model trained by Data_Train.
+        Takes a DataFrame (for example from pd.read_csv) and returns a copy with a Target_Out column.
         """
 
         try:
@@ -77,38 +67,33 @@ def MLtool():
         prog="JDML",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         description="""\
-            Tool : JustData_ML (JDML)
+            Tool : JustDataML (JDML)
             Author: Jaideepsinh Dabhi
-            emailID: jaideep.dabhi7603@gmail.com
-            Usage : JDML.py -C <Data_Config.csv>-T -P <test.csv> -O <Output Folder>
-                                         
-            * This Tool is Design to Train Machine Learning models and give prediction to help non coder or non tech students to do ML.
-            * This Tool will Train models with various paramters and give output.
-                        
-                *****************\n
-                ARUGMENTS  
-                -C, --Config    [Compulsory] You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
-                            Make Sure you give Proper Argument mentioned in the Document.
-                -T, --Train     [Optional]  If you give this function it will start training your model based on your data_config file.
-                            Make Sure you have Data in "Data" Folder.
-                -P, --Predict   [Optional]  If you give this function it will do prediction based on your trained model.
-                            Make  Sure you don't delete or modify artifact folder to get better results.
-                -O, --Output    [Please give with --Predict ]Name of Output csv file (if not given it will store data in Target_outFile csv file)
-                            It will store you input test file to output folder with 'Target_Out' Col containing Predictions based on your model.
-                                
+            Usage : JDML -C <Data_Config.csv> -T -P <test.csv> -O <Output name>
+
+            Trains machine learning models and predicts with the best one, without writing code.
+
+            Arguments
+                -C, --Config    [Required] Configuration file that describes the data and the models to try.
+                -T, --Train     [Optional] Train models using the configuration file.
+                                The data file must be in the "Data" folder.
+                -P, --Predict   [Optional] Predict a CSV file with the trained model.
+                                Keep the "artifact" folder created by training.
+                -O, --Output    [Optional, with --Predict] Name of the output CSV file in the "Output" folder
+                                (default: Target_outFile). It holds your input plus a 'Target_Out' column.
                         """,
-        epilog=" Contact jaideep.dabhi7603@gmail.com for any help or suggestion."
+        epilog="Contact jaideep.dabhi7603@gmail.com for help or suggestions."
     )
 
-    parser.add_argument('-C', '--Config', type = str, help=" Give a Config file to Application to get details about your task ")
-    parser.add_argument('-T', '--Train', action="store_true", default=False, help=" Give a Train argument to Train Data and create a Model")
-    parser.add_argument('-P', '--Predict', type=str, help=" Give a Test Data to Predict the Values from the Model")
-    parser.add_argument('-O', '--Output', type=str, help=" Give a Output name to Predicted Data Frame from Test Data")
+    parser.add_argument('-C', '--Config', type=str, help="Configuration file describing your task")
+    parser.add_argument('-T', '--Train', action="store_true", default=False, help="Train the models and save the best one")
+    parser.add_argument('-P', '--Predict', type=str, help="CSV file to predict with the trained model")
+    parser.add_argument('-O', '--Output', type=str, help="Name of the predictions file (saved in the Output folder)")
 
     args, _ = parser.parse_known_args()
     warnings.filterwarnings("ignore")
 
-    if not any(vars(args).values()):  # Check if no arguments were provided
+    if not any(vars(args).values()):
         parser.print_help()
         return
     if args.Output and not args.Predict:
@@ -120,7 +105,7 @@ def MLtool():
     if args.Predict and not os.path.isfile(args.Predict):
         parser.error(f"Prediction file '{args.Predict}' not found.")
 
-    # Resolve the output path before doing any (slow) training.
+    # Resolve the output path first so a bad name fails before the slow training.
     out_path = None
     if args.Predict:
         try:
@@ -140,7 +125,7 @@ def MLtool():
                                  Problem_Objective=data_processor.Problem_Objective,
                                  HyperParamter_Yes_or_No=data_processor.HyperParamter_Yes_or_No,
                                  Normalization_tech=data_processor.scaler)
-        print("Training of Data is Done please Do prediction using model in artifact folder")
+        print("Training is done. The model is saved in the artifact folder.")
 
     if args.Predict:
         test_data = pd.read_csv(args.Predict)

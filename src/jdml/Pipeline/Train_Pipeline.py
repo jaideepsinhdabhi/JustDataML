@@ -8,14 +8,11 @@ from ..components.Data_ingestion import DataIngestion
 from ..components.Data_Transformation import Data_Transformation
 from ..components.Model_Trainer import ModelTrainer
 
-#from source.Configuration import Features_Cols, Data_df, Target_Col, Models, HyperParamter_Yes_or_No, Problem_Objective
 
 class TrainingPipeline:
 
     """
-    This is a Training Pipeline to Train the Given Model and 
-    Combining all the Fuctions of this tool and do help us to get the best model for prediction
-    
+    Runs data ingestion, transformation and model training in order and saves the best model.
     """
 
     def __init__(self, features_cols, data_df, target_col, models, hyperparameter_yes_or_no, problem_objective,normalization_tech):
@@ -42,11 +39,7 @@ class TrainingPipeline:
             score = model_trainer.initiate_model_trainer(train_array=train_arr,test_array=test_arr)
             logging.info("Data Training is Successful, Model exported Successfully")
             print("Best Model Test Score is : ",score)
-           
+
 
         except Exception as e:
             raise CustomException(e,sys)
-        
-# if __name__ == "__main__":
-#     obj = TrainingPipeline()
-#     obj.Train_Model()

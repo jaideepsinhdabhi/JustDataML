@@ -10,15 +10,13 @@ from sklearn.model_selection import train_test_split
 from ..Logger import logging
 from ..Utils import save_object, evaluate_model
 from ..Exception import CustomException
-#from source.Configuration import Models, HyperParamter_Yes_or_No,Problem_Objective
 
 
-@dataclass 
+@dataclass
 class ModelTrainerConfig:
 
     """
-    Creating a Model Trainer Config to store model inot a pickle file
-
+    Where the trained model is saved.
     """
 
     train_model_file_path = os.path.join("artifact","model.pkl")
@@ -26,11 +24,8 @@ class ModelTrainerConfig:
 class ModelTrainer:
 
     """
-    Here we are Running the Models and Doing Evalution 
-    It will train based on the Problem Objective (Regression or Classification) 
-    If you have given Hyperparameter Argument as Yes it will do Hyperparater too for these Models 
-    I have tried to include all most frequently used models for both objectives.
-    This Function will pick up the best Models and train on that model with best hyper parameter tuning.
+    Trains and evaluates the selected models for the problem objective (Regression or Classification),
+    with hyperparameter tuning when it is set to Yes, and saves the best one.
     """
 
     def __init__(self, models, hyperparameter_yes_or_no, problem_objective):
@@ -66,7 +61,7 @@ class ModelTrainer:
                 raise ValueError("No models selected for training.")
             logging.info(f"It will use {list(models.keys())} Models for Training ")
             Hyparams= self.HyperParamter_Yes_or_No
-            logging.info(f" Models are Running with HypterParater Configuration of [{Hyparams}]")
+            logging.info(f" Hyperparameter tuning setting: [{Hyparams}]")
 
             stratify = None
             if classification and min(len(y_train[y_train == c]) for c in set(y_train)) >= 2:

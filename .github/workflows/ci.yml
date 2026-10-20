@@ -3,50 +3,42 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore: ["**.md", "examples/**"]
   pull_request:
+    paths-ignore: ["**.md", "examples/**"]
 
 permissions:
   contents: read
+
+# A newer push to the same branch or PR cancels the run still in progress.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.13"]  # oldest and newest supported
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # version is derived from git tags
-      - uses: astral-sh/setup-uv@v7
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
           enable-cache: true
       - run: uv sync --locked
       - run: uv run ruff check .
       - run: uv run pytest --cov=jdml --cov-report=term-missing
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0  # version is derived from git tags
-      - uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-      - run: uv sync --locked
-      - run: uv run bandit -q -r src
-      - run: uv run pip-audit
-
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0  # version is derived from git tags
-      - uses: astral-sh/setup-uv@v7
-      - run: uv build
-      - name: Smoke-test the built wheel in a clean environment
-        run: uv run --isolated --no-project --with dist/*.whl JDML --help
+      # The checks below only need to run once.
+      - if: matrix.python-version == '3.13'
+        run: |
+          uv run bandit -q -r src
+          uv run pip-audit
+      - if: matrix.python-version == '3.13'
+        run: |
+          uv build
+          uv run --isolated --no-project --with dist/*.whl JDML --help

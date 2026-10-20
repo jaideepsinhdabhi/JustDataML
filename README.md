@@ -1,5 +1,5 @@
 
-<img src="logo.png" width="150" height="100">
+<img src="https://raw.githubusercontent.com/jaideepsinhdabhi/JustDataML/main/logo.png" width="150" height="100">
 
 # JustDataML: Simplified Machine Learning for Everyone
 
