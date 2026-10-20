@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="240" viewBox="0 0 720 240" role="img" aria-label="JDML">
+  <rect x="20" y="20" width="200" height="200" rx="48" fill="#4f46e5"/>
+  <rect x="62" y="122" width="28" height="56" rx="8" fill="#fff" fill-opacity=".6"/>
+  <rect x="106" y="98" width="28" height="80" rx="8" fill="#fff" fill-opacity=".8"/>
+  <rect x="150" y="62" width="28" height="116" rx="8" fill="#fff"/>
+  <text x="256" y="176" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="132" font-weight="700" letter-spacing="-2" fill="#4f46e5">JDML</text>
+</svg>
