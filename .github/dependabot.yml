@@ -3,8 +3,19 @@ updates:
   - package-ecosystem: "uv"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
+    cooldown:
+      default-days: 7  # skip brand-new releases so one bad release does not cause churn
+    groups:
+      python-dependencies:
+        patterns: ["*"]  # one PR with every update instead of one PR per package
+
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "monthly"
+    open-pull-requests-limit: 1
+    groups:
+      github-actions:
+        patterns: ["*"]
