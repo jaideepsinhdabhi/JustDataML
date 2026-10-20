@@ -1,0 +1,77 @@
+name: Publish to PyPI
+
+# Runs when a GitHub Release is published. Pre-releases go to TestPyPI, full releases to PyPI.
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # the package version is derived from the release tag
+      - uses: astral-sh/setup-uv@v6
+      - name: Check the release tag is a valid version
+        run: |
+          uv run --no-project --with packaging python - <<'PY'
+          import os
+          from packaging.version import Version
+          tag = os.environ["GITHUB_REF_NAME"]
+          print(f"Release tag {tag!r} -> package version {Version(tag.removeprefix('v'))}")
+          PY
+      - run: uv sync --locked
+      - run: uv run pytest -q
+      - run: uv build
+      - name: Check the built version equals the release tag
+        run: |
+          uv run --no-project --with packaging python - <<'PY'
+          import glob, os
+          from packaging.utils import parse_wheel_filename
+          from packaging.version import Version
+          built = parse_wheel_filename(os.path.basename(glob.glob("dist/*.whl")[0]))[1]
+          expected = Version(os.environ["GITHUB_REF_NAME"].removeprefix("v"))
+          assert built == expected, f"built {built} but release tag says {expected}"
+          print("Publishing version", built)
+          PY
+      - name: Smoke-test the built wheel in a clean environment
+        run: uv run --isolated --no-project --with dist/*.whl JDML --help
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
+
+  publish-testpypi:
+    if: github.event.release.prerelease
+    needs: build
+    runs-on: ubuntu-latest
+    environment: testpypi
+    permissions:
+      id-token: write  # PyPI Trusted Publishing (OIDC); no API token is stored
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: astral-sh/setup-uv@v6
+      - run: uv publish --trusted-publishing always --publish-url https://test.pypi.org/legacy/
+
+  publish-pypi:
+    if: ${{ !github.event.release.prerelease }}
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write  # PyPI Trusted Publishing (OIDC); no API token is stored
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: astral-sh/setup-uv@v6
+      - run: uv publish --trusted-publishing always

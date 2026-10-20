@@ -1,0 +1,20 @@
+# Local notes
+TODO.md
+CLAUDE.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Runtime output
+logs/
+artifact/
+Output/

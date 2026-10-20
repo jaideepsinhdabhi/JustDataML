@@ -20,63 +20,116 @@ Welcome to JustDataML, a user-friendly tool designed to make machine learning ac
 
 ## Requirements
 
-To run this tool, you will require the following:
-
-Download all the required packages
-
-```bash
-pip install -r requirements.txt
-
-```
+- Python 3.10 or newer
+- On macOS, XGBoost needs the OpenMP runtime: `brew install libomp`
 
 ## Installation
 
-Suggestion: Use a Virtual env for this to successfully run it 
+Use a virtual environment.
 
-1. Install This Application with pip install
-
-```bash
-  pip install JustDataML
-
-```
-2. Install by cloning this repository
+1. From PyPI:
 
 ```bash
-  git clone https://github.com/jaideepsinhdabhi/JustDataML.git
+pip install JustDataML
+# or, with uv
+uv pip install JustDataML
 ```
-Go into the Repo Folder
+
+2. From source (development), using [uv](https://docs.astral.sh/uv/):
 
 ```bash
-  cd JustDataML
+git clone https://github.com/jaideepsinhdabhi/JustDataML.git
+cd JustDataML
+uv sync            # creates .venv and installs the package with dev tools
+uv run pytest      # run the tests
 ```
-Download all the required packages
-```bash
-  pip install -r requirements.txt
-```
+
 ## Usage/Examples
 
-```bash
-python JDML.py --Config <Configfile> --Train --Predict <test.csv> --Output <Output Name>
+The command is `JDML` (installed with the package). Run it from a working folder that contains a `Data/` folder with your data file; the tool creates `artifact/`, `Output/` and `logs/` next to it.
 
+```bash
+JDML --Config <Configfile> --Train --Predict <test.csv> --Output <Output Name>
 ```
+
+Try the bundled demo:
+
+```bash
+cd examples
+JDML -C Data_Config_clf.csv -T -P Data/bezdekIris.data -O demo
+```
+
 ### Arguments
 
-- `-C, --Config`: You need to provide a configuration file to obtain all the necessary arguments for ML models to operate.
+- `-C, --Config`: [Required with `-T` or `-P`] Path to the configuration file (see below).
 
-    Note: Make sure you give proper argument mentioned in the Document.
+- `-T, --Train`: Trains models based on the config file. The data file named in the config must be inside the `Data` folder.
 
-- `-T, --Train`: [Optional] If provided, it initiates model training based on the specified data_config file. 
+- `-P, --Predict`: Predicts the rows of the given CSV with the trained model. The CSV must contain every column listed in `Features_Cols`. Keep the `artifact` folder from training next to where you run the command.
 
-    Note: Ensure that the Data_Config.csv file and Datafile are available in the "Data" folder.
+- `-O, --Output`: [Optional, only with `-P`] Name of the predictions file, saved as `Output/<name>.csv` (default `Target_outFile`). It must be a plain name; paths that leave the `Output` folder (such as `../x` or absolute paths) are rejected.
 
-- `-P, --Predict`: [Optional] If provided, performs prediction using the trained model. Make sure not to delete or modify the artifact folder to get the results.
+You can combine `-T` and `-P` to train and predict in one run. Training also writes `Output/Model_Summary.csv`, and `Output/Hyperparameter_stats.csv` when hyperparameter tuning is `Yes`.
 
-- `-O, --Output`: [Required with -P (--Predict)] Specifies the output name for the predicted data frame generated from the test data.
-    Note: it will also generate a Model_summary file and if Hyperparameter is given Yes in the Config file then it will generate a stats file for that too
+### How the best model is chosen
 
+Models are compared on a validation split taken from the training data (80/20 of the 80% training part). The best one is then refitted on all training data and scored once on the untouched test set; that is the "Best Model Test Score" printed at the end. Because the columns in `Model_Summary.csv` show validation scores for the comparison, they are named `*_validation`.
 
+### Use it as a Python library
 
+```python
+import pandas as pd
+from jdml.cli import Just_Data_ML
+from jdml.Configuration import DataProcessor
 
+config = DataProcessor("Data_Config.csv")   # same config file as the CLI
+config.load_config()
+config.read_data()                          # reads Data/<Data_Name>
+
+jdml = Just_Data_ML()
+jdml.Data_Train(
+    Features_Cols=config.Features_Cols,
+    Data_df=config.Data_df,
+    Target_Col=config.Target_Col,
+    Models=config.Models,
+    Problem_Objective=config.Problem_Objective,
+    HyperParamter_Yes_or_No=config.HyperParamter_Yes_or_No,
+    Normalization_tech=config.scaler,
+)
+
+new_rows = pd.read_csv("new_data.csv")
+result = jdml.Predict_test(config.Problem_Objective, config.Features_Cols, new_rows)
+print(result["Target_Out"])                 # your DataFrame plus a Target_Out column
+```
+
+Files are written relative to the current working directory (`artifact/`, `Output/`). The library does not configure logging; call `jdml.Logger.setup_logging()` if you want a log file.
+
+### Security notes
+
+- Trained models are stored with `joblib` in `artifact/`, with a `.sha256` checksum next to each file. A model whose checksum is missing or does not match is refused. The checksum detects tampering and corruption; it cannot protect against someone who can rewrite both files, so only run predictions from an `artifact` folder you trust.
+- Output and data file names from the command line and the config file cannot point outside the `Output` and `Data` folders.
+
+### Upgrading from 0.0.x
+
+Version 0.1.0 reorganises the package. Check these if you used an earlier release:
+
+- The Python package is now `jdml` (all lower case) instead of `JDML`: `from JDML.JDML import Just_Data_ML` becomes `from jdml.cli import Just_Data_ML`, and `JDML.source.*` modules are now `jdml.*` (for example `jdml.Configuration`). The `JDML` command is unchanged.
+- Python 3.10+ is required.
+- Models trained with an earlier version are not loaded (no checksum files, renamed `preprocessor.pkl`). Train again.
+- `Ridge Classification` is the model name; the old misspelling `Ridge Classifcaiton` is still accepted in config files.
+- Bad configuration values (unknown model, wrong objective, target listed among the features, ...) now stop with an error message instead of printing a note and failing later.
+- The sample data and configs moved to the `examples` folder.
+
+### Development and releases
+
+```bash
+uv sync                 # install
+uv run pytest --cov     # tests
+uv run ruff check .     # lint
+uv build                # build sdist + wheel into dist/
+```
+
+GitHub Actions runs the tests on every push and pull request. The package version comes from the git tag, so there is no version number to edit. To release, publish a GitHub Release with the tag you want, for example `v0.1.0` (the leading `v` is optional and removed). The release workflow builds that version, checks the built version equals the tag, runs the tests and publishes to PyPI. Releases marked as pre-release (for example tag `v0.2.0rc1`) go to TestPyPI instead. The tag must be a valid [PEP 440](https://peps.python.org/pep-0440/) version and higher than the one already on PyPI. Builds made without a tag get a development version such as `0.0.1.dev24+g1234abc`.
 
 ## Data Configuration File Example
 
@@ -95,9 +148,9 @@ The CSV file contains the following fields:
 - **HyperParamter_Yes_or_No:** Indicates whether hyperparameter tuning should be performed (`Yes` or `No`).
 
 
-    #####   A sample csv file and some Data are there in Data Folder for a demo Run
+    #####   Sample config files and data are in the `examples` folder for a demo run (`Data_Config_clf.csv`, `Data_Config_reg.csv`).
 
-    #### Note: It will also generate logs into a logs folder for every run please check for every Run to get more idea on that.
+    #### Note: The command line tool writes a log file into a `logs` folder for every run.
 
 ## Available Models for Regression and Classification
 
